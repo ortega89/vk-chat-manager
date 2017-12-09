@@ -54,7 +54,7 @@ public class VkChatOperator extends VkOperator {
 					msg.getBody());
 	}
 	
-	public String translateAction(String action, int userId) {
+	public String translateAction(String action, Integer userId) {
 		UserXtrCounters user = getUser(userId);
 		boolean isFemale = user != null && user.getSex() == Sex.FEMALE;
 		if (action == null)
@@ -62,17 +62,17 @@ public class VkChatOperator extends VkOperator {
 		
 		switch (action) {
 		case "chat_invite_user": return isFemale ? "приглашена" : "приглашен";
-		case "chat_kick_user": return getUser(userId).getSex() == Sex.FEMALE ? "исключена" : "исключен";
+		case "chat_kick_user": return isFemale ? "исключена" : "исключен";
 		default: return action;
 		}
 	}
 	
-	public UserXtrCounters getUser(int userId) {
+	public UserXtrCounters getUser(Integer userId) {
 		UserXtrCounters user = usersMap.get(userId);
 		return user;
 	}
 	
-	public String getUserName(int userId) {
+	public String getUserName(Integer userId) {
 		UserXtrCounters user = usersMap.get(userId);
 		return user != null ? getUserName(user) : ("id" + userId);
 	}
@@ -82,7 +82,7 @@ public class VkChatOperator extends VkOperator {
 		return fullName;
 	}
 	
-	public String getUserNameWithCase(int userId, UsersNameCase theCase) throws Exception {
+	public String getUserNameWithCase(Integer userId, UsersNameCase theCase) throws Exception {
 		if (theCase == UsersNameCase.NOMINATIVE) {
 			return getUserName(userId);
 		} else {
@@ -105,7 +105,7 @@ public class VkChatOperator extends VkOperator {
 		}
 	}
 	
-	public String getUserURL(int userId) {
+	public String getUserURL(Integer userId) {
 		UserXtrCounters user = usersMap.get(userId);
 		return getUserURL(user);
 	}
