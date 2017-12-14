@@ -12,6 +12,12 @@ import java.util.StringJoiner;
 
 public class Config {
 	
+	@Prop("proxy.host")
+	public static String PROXY_HOST = "";
+	
+	@Prop("proxy.port")
+	public static int PROXY_PORT = 0;
+	
 	@Prop("client.id")
 	public static int CLIENT_ID = 0;
 	

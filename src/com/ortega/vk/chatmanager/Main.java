@@ -4,11 +4,8 @@ import com.ortega.vk.chatmanager.data.ChatUsersActivity;
 import com.ortega.vk.chatmanager.data.ChatUsersPresence;
 import com.ortega.vk.chatmanager.operator.VkChatOperator;
 import com.ortega.vk.chatmanager.report.FileReporter;
-import com.vk.api.sdk.client.TransportClient;
 import com.vk.api.sdk.client.VkApiClient;
 import com.vk.api.sdk.client.actors.UserActor;
-import com.vk.api.sdk.httpclient.HttpTransportClient;
-
 import java.util.Arrays;
 
 import com.ortega.vk.chatmanager.analyzer.ChatMessagesAnalyzer;
@@ -16,6 +13,9 @@ import com.ortega.vk.chatmanager.analyzer.ChatUsersPresenceAnalyzer;
 import com.ortega.vk.chatmanager.auth.AuthManager;
 import com.ortega.vk.chatmanager.auth.AutoAuthManager;
 import com.ortega.vk.chatmanager.auth.ManualAuthManager;
+import com.ortega.vk.chatmanager.client.ClientBuilder;
+import com.ortega.vk.chatmanager.client.ProxyClientBuilder;
+import com.ortega.vk.chatmanager.client.SimpleClientBuilder;
 import com.ortega.vk.chatmanager.config.Config;
 
 public class Main {
@@ -29,8 +29,18 @@ public class Main {
 			return;
 		}
 		
-		TransportClient tc = HttpTransportClient.getInstance();
-		VkApiClient vk = new VkApiClient(tc);
+		ClientBuilder builder;
+		
+		if (Config.PROXY_HOST.isEmpty()) {
+			System.out.println("Proxy settings missing, building a simple VK client...");
+			builder = new SimpleClientBuilder();
+		} else {
+			System.out.println("Proxy settings provided, building a proxy VK client...");
+			builder = new ProxyClientBuilder(Config.PROXY_HOST, Config.PROXY_PORT);
+		}
+		
+		VkApiClient vk = builder.buildClient();
+		
 		AuthManager auth;
 		if (Config.EMAIL.isEmpty() || Config.PASS.isEmpty()) {
 			System.out.println("Email/password missing, applying manual authentication...");
